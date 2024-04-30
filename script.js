@@ -1,7 +1,3 @@
-/*
-API for v1.5 https://flightplandatabase.com/dev/api#endpoint-airport
-https://www.taniarascia.com/how-to-connect-to-an-api-with-javascript/
-*/
 
 var flaps, ecs;
 var inputWeight;
