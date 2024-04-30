@@ -1,3 +1,4 @@
+
 var flaps, ecs;
 var inputWeight;
 var inputTemp;
@@ -261,35 +262,36 @@ here beginns the weight array*/[/*weight 19000*/[/*-40*/[/*v1*/,/*v2*/,/*v3*/],/
 
 
 function init () {
-    resultDiv = document.getElementById("result");
-    calcButton = document.getElementById("calculate");
-    resetButton = document.getElementById("reset");
-    calcButton.addEventListener('click', calc);
-    resetButton.addEventListener('click', reset);
-    dispInputErr = document.getElementById('badInput');
-    dispWrongSetConf = document.getElementById("badConf");
-    dispV1 = document.getElementById("v1");
-    dispVr = document.getElementById("vr");
-    dispV2 = document.getElementById("v2");
-    dispVClean = document.getElementById("vClean");
-    dispVFlaps = document.getElementById("vFlap");
-    dispPA = document.getElementById("presAlt");
+   resultDiv = document.getElementById("result");
+   calcButton = document.getElementById("calculate");
+   resetButton = document.getElementById("reset");
+   calcButton.addEventListener('click', calc);
+   resetButton.addEventListener('click', reset);
+   dispInputErr = document.getElementById('badInput');
+   dispWrongSetConf = document.getElementById("badConf");
+   dispV1 = document.getElementById("v1");
+   dispVr = document.getElementById("vr");
+   dispV2 = document.getElementById("v2");
+   dispVClean = document.getElementById("vClean");
+   dispVFlaps = document.getElementById("vFlap");
+   dispPA = document.getElementById("presAlt");
 
-    inputWeightRef = document.getElementById("grossWeight");
-    inputTempRef = document.getElementById("temperature");
-    pressureRef = document.getElementById("pressure");
-    fieldElevationRef = document.getElementById("fieldElevation");
-    runwayHeadingRef = document.getElementById("rwHeading");
-    runwaySlopeRef = document.getElementById("rwSlope");
-    windHeadingRef = document.getElementById("windDegrees");
-    windSpeedRef = document.getElementById("windSpeed");
-    flapRef = document.getElementsByName("flaps");//if button 15 chosen set true otherwise false.
-    ecsRef = document.getElementsByName("ecs");//if on button set true otherwise false
-    aiRef = document.getElementsByName("ai");
- }
- window.addEventListener('load', init);
+   inputWeightRef = document.getElementById("grossWeight");
+   inputTempRef = document.getElementById("temperature");
+   pressureRef = document.getElementById("pressure");
+   fieldElevationRef = document.getElementById("fieldElevation");
+   runwayHeadingRef = document.getElementById("rwHeading");
+   runwaySlopeRef = document.getElementById("rwSlope");
+   windHeadingRef = document.getElementById("windDegrees");
+   windSpeedRef = document.getElementById("windSpeed");
+   flapRef = document.getElementsByName("flaps");//if button 15 chosen set true otherwise false.
+   ecsRef = document.getElementsByName("ecs");//if on button set true otherwise false
+   aiRef = document.getElementsByName("ai");
+}
 
- function calc () {
+window.addEventListener('load', init);
+
+function calc () {
 
     resultDiv.style.display="inline";
     resultDiv.style.position = "relative";
@@ -370,7 +372,6 @@ function init () {
     }
     dispPA.innerText =  calculatedPA;
 }
-
 
 function reset () {
     resultDiv.style.display="none";
@@ -497,7 +498,7 @@ function getSpeeds(pa, weight, temp, setArr){
             for(var weightIndex = 20000; weightIndex<=29000; weightIndex+=1000){
             /*the function iterates over the 10 array elements of possible weights and returns the row of the weight array that
             contains the vSpeeds*/
-                if (weight == weightIndex){
+                if (weight== weightIndex){
                     var loopTemp= -40;
                     var speedIndex=0;
                     let bool=true;
@@ -518,67 +519,86 @@ function getSpeeds(pa, weight, temp, setArr){
             break;//end default case
     }
 }
+
+
 function crossCheck(pressureAltitudeArr, weightArr) {
-    /*The function takes in V1 from both Pressure Altitude and weight arreyes and compares the values within each arrey. The array with the biggest number gets returned*/
-        var valueReturned=[];
-        if(pressureAltitudeArr[0][0] >= weightArr[0][0] || typeof weightArr[0][0]=='undefined'){
-            //add all speeds together in form of a the returned array, valueReturned
+/*The function takes in V1 from both Pressure Altitude and weight arreyes and compares the values within each arrey. The array with the biggest number gets returned*/
+    var valueReturned=[];
+    if(pressureAltitudeArr[0][0] >= weightArr[0][0] || typeof weightArr[0][0]=='undefined'){
+        //add all speeds together in form of a the returned array, valueReturned
 
-            if (typeof weightArr[2]=='undefined'){
-                valueReturned.push(pressureAltitudeArr[0][0], pressureAltitudeArr[0][1], pressureAltitudeArr[0][2], weightArr[1]);
-            }
-            else{
-                valueReturned.push(pressureAltitudeArr[0][0], pressureAltitudeArr[0][1], pressureAltitudeArr[0][2], weightArr[1], weightArr[2]);
-            }
-            return valueReturned;
-          }
-        else if(null === weightArr[0][0]){//in the case weight arrey is empty return pressure altitude arrey v-speeds.
-        //it should logically be the same as if above, however this line was needed.
-            valueReturned.push(weightArr[1], weightArr[2]);
-        return pressureAltitudeArr;
+        if (typeof weightArr[2]=='undefined'){
+            valueReturned.push(pressureAltitudeArr[0][0], pressureAltitudeArr[0][1], pressureAltitudeArr[0][2], weightArr[1]);
         }
         else{
-            valueReturned.push(weightArr[0][0], weightArr[0][1], weightArr[0][2], weightArr[1], weightArr[2]);
-            return valueReturned;
-          }
+            valueReturned.push(pressureAltitudeArr[0][0], pressureAltitudeArr[0][1], pressureAltitudeArr[0][2], weightArr[1], weightArr[2]);
         }
-
-    function windCalc(runwayHeading, windDirection, windSpeed){
-        /*The function takes in runway heading, wind heading and windspeed and returns the wind component vectors (first vector is crosswind and second is headwind) in KNOTS of speed*/
-        runwayHeading = runwayHeading * 10;//as the runway that will be entered by user will be a two digit number eg 17
-        let degreeDiff = runwayHeading-windDirection;
-        let radianDiff = (degreeDiff * Math.PI)/180;
-        let windArr=[];//Array containing crosswind speed vector and headwind speed vector
-        let crosswind = windSpeed*Math.sin(radianDiff);
-        let headwind = windSpeed*Math.cos(radianDiff);
-
-        windArr.push(Math.round(crosswind*1)/1, Math.round(headwind*1)/1);
-
-        return windArr;
+        return valueReturned;
+      }
+    else if(null === weightArr[0][0]){//in the case weight arrey is empty return pressure altitude arrey v-speeds.
+    //it should logically be the same as if above, however this line was needed.
+        valueReturned.push(weightArr[1], weightArr[2]);
+    return pressureAltitudeArr;
     }
-    function paCalc(pressure, fieldElevation){
-        //calculates pressure altitude and returns it as its highest value
-        let pa = (29.92 - pressure)*1000 + fieldElevation;
-        pa = Math.round(pa*1000)/1000;
-        return pa;
-    }
-    function windCompCalc(runwayHeading, windHeading, windSpeed){
-        runwayHeading = runwayHeading/10;
-        let windComponents = windCalc(runwayHeading, windHeading, windSpeed);
-        if (windComponents[1] > 0){
-            headwind = windComponents[1];
-        }
-        else{
-            headwind = 0;//this is due to us only wanting to use headwind, we do not take tailwind into consideration as per aircraft documentation
-        }
-        return headwind;
+    else{
+        valueReturned.push(weightArr[0][0], weightArr[0][1], weightArr[0][2], weightArr[1], weightArr[2]);
+        return valueReturned;
+      }
     }
 
-    function speedsCorrected(v1, vr, v2, headwind){
-        //as long as v1 < vr && vr < v2 add 1 knot airspeed to the resulting speeds per 15kts headwind, if its above set the superior number speeds to the variable.
-    if(headwind >= 15){
-        v1 += Math.floor(headwind/15);
-        vr += Math.floor(headwind/15);
+function windCalc(runwayHeading, windDirection, windSpeed){
+    /*The function takes in runway heading, wind heading and windspeed and returns the wind component vectors (first vector is crosswind and second is headwind) in KNOTS of speed*/
+    runwayHeading = runwayHeading * 10;//as the runway that will be entered by user will be a two digit number eg 17
+    let degreeDiff = runwayHeading-windDirection;
+    let radianDiff = (degreeDiff * Math.PI)/180;
+    let windArr=[];//Array containing crosswind speed vector and headwind speed vector
+    let crosswind = windSpeed*Math.sin(radianDiff);
+    let headwind = windSpeed*Math.cos(radianDiff);
+
+    windArr.push(Math.round(crosswind*1)/1, Math.round(headwind*1)/1);
+
+    return windArr;
+}
+function paCalc(pressure, fieldElevation){
+    //calculates pressure altitude and returns it as its highest value
+    let pa = (29.92 - pressure)*1000 + fieldElevation;
+    pa = Math.round(pa*1000)/1000;
+    return pa;
+}
+function windCompCalc(runwayHeading, windHeading, windSpeed){
+    runwayHeading = runwayHeading/10;
+    let windComponents = windCalc(runwayHeading, windHeading, windSpeed);
+    if (windComponents[1] > 0){
+        headwind = windComponents[1];
+    }
+    else{
+        headwind = 0;//this is due to us only wanting to use headwind, we do not take tailwind into consideration as per aircraft documentation
+    }
+    return headwind;
+}
+
+function speedsCorrected(v1, vr, v2, headwind){
+    //as long as v1 < vr && vr < v2 add 1 knot airspeed to the resulting speeds per 15kts headwind, if its above set the superior number speeds to the variable.
+if(headwind >= 15){
+    v1 += Math.floor(headwind/15);
+    vr += Math.floor(headwind/15);
+    if (vr>v2){
+        vr = v2;
+    }
+    if (v1>vr){
+        v1 = vr;
+    }
+}
+return [v1, vr];
+}
+
+function slopeCorrection(v1, vr, v2,  runwaySlope){
+    let v1Past = v1;
+    let vrPast = vr;
+    if (runwaySlope >= 1){
+        runwaySlope = Math.floor(runwaySlope);
+        v1 += 2 * runwaySlope;
+        vr += 0.5 * runwaySlope;
         if (vr>v2){
             vr = v2;
         }
@@ -586,73 +606,55 @@ function crossCheck(pressureAltitudeArr, weightArr) {
             v1 = vr;
         }
     }
+
+    else if (runwaySlope <= -1){
+        runwaySlope = Math.ceil(runwaySlope);
+        v1 += 2.5 * runwaySlope;
+        vr += 1.5 * runwaySlope;
+        console.log('v1 past: '+v1Past);
+        console.log('rotate past: '+vrPast);
+        console.log('v1 after '+v1);
+        console.log('Rotate after'+vr);
+    }
+        //making sure the value never drops below the minimum values.
+    if (v1Past > v1){
+        v1 = v1Past;
+    }
+    if (vrPast > vr){
+        vr = vrPast;
+    }
+
     return [v1, vr];
+}
+function limits(weight, temperature, pressure, elevation, runwayHeading, runwaySlope, windDegrees, windspeed){
+    let retString = '';
+    //the function checks the input ranges and returns ether error messages or the checked values
+    if (weight > 30000 || weight < 19000){
+        retString += 'Weight Error: Weight outside parametars. If weight below 19.000 lbs, set the value to 19.000 min |';
+    }
+    if (temperature > 50 || temperature < -40){
+        retString += '| Temperature Error: Temperature out of range, takeoff not possible |';
+    }
+    if (pressure > 35.00|| pressure < 25.00){
+        retString += '| Airfield Pressure error: Pressure outside allowed parametars |';
+    }
+    if (elevation < -100){
+        retString += '| Elevation error: Airport elevation outside parametars |';
+    }
+    if (runwayHeading > 360 || runwayHeading < 1){
+        retString += '| Heading Error: Write runway heading between 1 and 360 degrees |';
+    }
+    if (runwaySlope > 5){
+        retString += '| Slope error: I would seriously question departing/landing there mate. If you want to calculate some reference values use 5 degrees and below. |';
+    }
+    if (windDegrees > 360 || windDegrees < 1){
+        retString += '| Wind Degree Error: Write wind between 1 and 360 degrees |';
+    }
+    if (windspeed > 50 || windspeed < 0){
+        retString += '| Windspeed Error: Windspeed out of range --> Do not fly';
     }
 
-    function slopeCorrection(v1, vr, v2,  runwaySlope){
-        let v1Past = v1;
-        let vrPast = vr;
-        if (runwaySlope >= 1){
-            runwaySlope = Math.floor(runwaySlope);
-            v1 += 2 * runwaySlope;
-            vr += 0.5 * runwaySlope;
-            if (vr>v2){
-                vr = v2;
-            }
-            if (v1>vr){
-                v1 = vr;
-            }
-        }
-
-        else if (runwaySlope <= -1){
-            runwaySlope = Math.ceil(runwaySlope);
-            v1 += 2.5 * runwaySlope;
-            vr += 1.5 * runwaySlope;
-            console.log('v1 past: '+v1Past);
-            console.log('rotate past: '+vrPast);
-            console.log('v1 after '+v1);
-            console.log('Rotate after'+vr);
-        }
-            //making sure the value never drops below the minimum values.
-        if (v1Past > v1){
-            v1 = v1Past;
-        }
-        if (vrPast > vr){
-            vr = vrPast;
-        }
-
-        return [v1, vr];
+    if(retString != ''){
+        alert(retString);
     }
-
-    function limits(weight, temperature, pressure, elevation, runwayHeading, runwaySlope, windDegrees, windspeed){
-        let retString = '';
-        //the function checks the input ranges and returns ether error messages or the checked values
-        if (weight > 30000 || weight < 19000){
-            retString += 'Weight Error: Weight outside parametars. If weight below 19.000 lbs, set the value to 19.000 min |';
-        }
-        if (temperature > 50 || temperature < -40){
-            retString += '| Temperature Error: Temperature out of range, takeoff not possible |';
-        }
-        if (pressure > 35.00|| pressure < 25.00){
-            retString += '| Airfield Pressure error: Pressure outside allowed parametars |';
-        }
-        if (elevation < -100){
-            retString += '| Elevation error: Airport elevation outside parametars |';
-        }
-        if (runwayHeading > 360 || runwayHeading < 1){
-            retString += '| Heading Error: Write runway heading between 1 and 360 degrees |';
-        }
-        if (runwaySlope > 5){
-            retString += '| Slope error: I would seriously question departing/landing there mate. If you want to calculate some reference values use 5 degrees and below. |';
-        }
-        if (windDegrees > 360 || windDegrees < 1){
-            retString += '| Wind Degree Error: Write wind between 1 and 360 degrees |';
-        }
-        if (windspeed > 50 || windspeed < 0){
-            retString += '| Windspeed Error: Windspeed out of range --> Do not fly';
-        }
-
-        if(retString != ''){
-            alert(retString);
-        }
-    }
+}
