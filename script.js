@@ -1,3 +1,7 @@
+/*
+API for v1.5 https://flightplandatabase.com/dev/api#endpoint-airport
+https://www.taniarascia.com/how-to-connect-to-an-api-with-javascript/
+*/
 
 var flaps, ecs;
 var inputWeight;
@@ -40,7 +44,7 @@ var pressureAltitudeArr= [];
 var weightArr= [];
 
 /*
-Declaration of all speed arrays
+Declaration of all speed arrays 
 
 set1: FLAP0, ECS OFF, A/I Off
 set2: Flap0, ECS OFF, A/I on
@@ -57,8 +61,8 @@ setNumber[X][Y][Z][W] --> 3 elements: 0:2 = V1, Vr, V2
 
 Six arrays
     Two arreys each, one PA one weight
-        inside PA there are 5 arrays (rows) corresponding to the pressure altitude,  each row contains 12 indexes having V1, V2. V3 speeds depending on what outside temperature is except element 11 and 12 which contain vclean and vflap speeds.
-        inside Weight there are 10 arrays (rows) corresponding to aircraft gross weight, each row containing 12 indexes having V1, V2. V3 speeds depending on what outside temperature is except element 11 and 12 which contain vclean and vflap speeds.
+        inside PA there are 5 arrays (rows) corresponding to the pressure altitude,  each row contains 12 indexes having V1, V2. V3 speeds depending on what outside temperature is except element 11 and 12 which contain vclean and vflap speeds.  
+        inside Weight there are 10 arrays (rows) corresponding to aircraft gross weight, each row containing 12 indexes having V1, V2. V3 speeds depending on what outside temperature is except element 11 and 12 which contain vclean and vflap speeds.  
 */
 
 const set1 = [[[[109,115,121],[108,114,120], [107,113,119],[106,113,118],[105,112,117],[104,111,116],[104,111,116],[103,110,115],[102,109,114],[98,106,109],/*Vclean*/,/*Vflap missing*/]
@@ -69,7 +73,7 @@ const set1 = [[[[109,115,121],[108,114,120], [107,113,119],[106,113,118],[105,11
 
 ,[[105,112,117],[104,111,116], [103,110,115],[102,109,114],[101,109,114],[101,108,112],[100,106,111],[/*v1*/,/*v2*/,/*v3*/],[/*v1*/,/*v2*/,/*v3*/],[/*v1*/,/*v2*/,/*v3*/],/*Vclean*/,/*Vflap*/]
 
-,[[103,110,115],[102,109,114], [101,109,113],[101,108,112],[100,108,111],[99,106,109],[100,106,108],[/*v1*/,/*v2*/,/*v3*/],[/*v1*/,/*v2*/,/*v3*/],[/*v1*/,/*v2*/,/*v3*/],/*Vclean*/,/*Vflap*/]],
+,[[103,110,115],[102,109,114], [101,109,113],[101,108,112],[100,108,111],[99,106,109],[100,106,108],[/*v1*/,/*v2*/,/*v3*/],[/*v1*/,/*v2*/,/*v3*/],[/*v1*/,/*v2*/,/*v3*/],/*Vclean*/,/*Vflap*/]], 
 
 /*------------------------------
 
@@ -101,7 +105,7 @@ const set2 = [/*here beginns the PA array*/[/*pressure altitude -1000*/[/*-40*/[
 
 ,/*pressure altitude 4000*/[/*-40*/[105,111,117],/*-30*/[104,110,116], /*-20*/[103,109,114],/*-10*/[102,108,113],/*0*/[100,107,111],/*10*/,/*20*/,/*30*/[/*v1*/,/*v2*/,/*v3*/],/*40*/[/*v1*/,/*v2*/,/*v3*/],/*50*/[/*v1*/,/*v2*/,/*v3*/],/*Vclean*/,/*Vflap*/]
 
-,/*pressure altitude 6000*/[/*-40*/[104,110,115],/*-30*/[103,109,114], /*-20*/[102,108,113],/*-10*/[101,107,112],/*0*/[100,106,110],/*10*/[100,106,108],/*20*/,/*30*/[/*v1*/,/*v2*/,/*v3*/],/*40*/[/*v1*/,/*v2*/,/*v3*/],/*50*/[/*v1*/,/*v2*/,/*v3*/],/*Vclean*/,/*Vflap*/]],
+,/*pressure altitude 6000*/[/*-40*/[104,110,115],/*-30*/[103,109,114], /*-20*/[102,108,113],/*-10*/[101,107,112],/*0*/[100,106,110],/*10*/[100,106,108],/*20*/,/*30*/[/*v1*/,/*v2*/,/*v3*/],/*40*/[/*v1*/,/*v2*/,/*v3*/],/*50*/[/*v1*/,/*v2*/,/*v3*/],/*Vclean*/,/*Vflap*/]], 
 
 /*------------------------------
 
@@ -133,7 +137,7 @@ const set3 = [/*here beginns the PA array*/[/*pressure altitude -1000*/[/*-40*/[
 
 ,/*pressure altitude 4000*/[/*-40*/[106,112,117],/*-30*/[105,111,116], /*-20*/[104,110,115],/*-10*/[103,109,114],/*0*/[102,108,113],/*10*/[100,107,112],/*20*/[97,105,109],/*30*/[93,101,104],/*40*/[89,98,100],/*50*/[86,94,95],/*Vclean*/,/*Vflap*/]
 
-,/*pressure altitude 6000*/[/*-40*/[104,110,115],/*-30*/[103,109,114], /*-20*/[102,109,113],/*-10*/[101,108,112],/*0*/[99,106,111],/*10*/[97,104,108],/*20*/[93,101,104],/*30*/[89,97,99],/*40*/[86,94,95],/*50*/[82,91,91],/*Vclean*/,/*Vflap*/]],
+,/*pressure altitude 6000*/[/*-40*/[104,110,115],/*-30*/[103,109,114], /*-20*/[102,109,113],/*-10*/[101,108,112],/*0*/[99,106,111],/*10*/[97,104,108],/*20*/[93,101,104],/*30*/[89,97,99],/*40*/[86,94,95],/*50*/[82,91,91],/*Vclean*/,/*Vflap*/]], 
 
 /*------------------------------
 
@@ -165,7 +169,7 @@ const set4 = [/*here beginns the PA array*/[/*pressure altitude -1000*/[/*-40*/[
 
 ,/*pressure altitude 4000*/[/*-40*/[105,108,111],/*-30*/[105,107,110], /*-20*/[104,106,109],/*-10*/[103,106,108],/*0*/[102,105,107],/*10*/[101,104,107],/*20*/[100,103,105],/*30*/[97,100,102],/*40*/[93,96,96],/*50*/[/*v1*/,/*v2*/,/*v3*/],/*Vclean*/,/*Vflap*/]
 
-,/*pressure altitude 6000*/[/*-40*/[104,107,109],/*-30*/[103,106,109], /*-20*/[102,105,108],/*-10*/[101,105,107],/*0*/[100,103,106],/*10*/[98,102,104],/*20*/[96,99,101],/*30*/[93,97,99],/*40*/[/*v1*/,/*v2*/,/*v3*/],/*50*/[/*v1*/,/*v2*/,/*v3*/],/*Vclean*/,/*Vflap*/]],
+,/*pressure altitude 6000*/[/*-40*/[104,107,109],/*-30*/[103,106,109], /*-20*/[102,105,108],/*-10*/[101,105,107],/*0*/[100,103,106],/*10*/[98,102,104],/*20*/[96,99,101],/*30*/[93,97,99],/*40*/[/*v1*/,/*v2*/,/*v3*/],/*50*/[/*v1*/,/*v2*/,/*v3*/],/*Vclean*/,/*Vflap*/]], 
 
 /*------------------------------
 
@@ -197,7 +201,7 @@ const set5 = [/*here beginns the PA array*/[/*pressure altitude -1000*/[/*-40*/[
 
 ,/*pressure altitude 4000*/[/*-40*/[105,108,111],/*-30*/[104,107,110], /*-20*/[103,106,109],/*-10*/[102,105,108],/*0*/[101,105,108],/*10*/[100,103,106],/*20*/[97,100,102],/*30*/[94,96,98],/*40*/[/*v1*/,/*v2*/,/*v3*/],/*50*/[/*v1*/,/*v2*/,/*v3*/],/*Vclean*/,/*Vflap*/]
 
-,/*pressure altitude 6000*/[/*-40*/[103,106,109],/*-30*/[102,105,108], /*-20*/[101,105,107],/*-10*/[101,104,106],/*0*/[99,102,105],/*10*/[97,100,102],/*20*/[94,97,99],/*30*/[94,95,96],/*40*/[/*v1*/,/*v2*/,/*v3*/],/*50*/[/*v1*/,/*v2*/,/*v3*/],/*Vclean*/,/*Vflap*/]],
+,/*pressure altitude 6000*/[/*-40*/[103,106,109],/*-30*/[102,105,108], /*-20*/[101,105,107],/*-10*/[101,104,106],/*0*/[99,102,105],/*10*/[97,100,102],/*20*/[94,97,99],/*30*/[94,95,96],/*40*/[/*v1*/,/*v2*/,/*v3*/],/*50*/[/*v1*/,/*v2*/,/*v3*/],/*Vclean*/,/*Vflap*/]], 
 
 /*------------------------------
 
@@ -230,7 +234,7 @@ const set6 = [/*here beginns the PA array*/[/*pressure altitude -1000*/[/*-40*/[
 
 ,/*pressure altitude 4000*/[/*-40*/[105,108,111],/*-30*/[105,107,110], /*-20*/[104,106,110],/*-10*/[103,106,109],/*0*/[102,105,108],/*10*/[101,104,106],/*20*/[98,101,104],/*30*/[94,98,100],/*40*/[91,94,96],/*50*/[87,91,93],/*Vclean*/,/*Vflap*/]
 
-,/*pressure altitude 6000*/[/*-40*/[104,107,110],/*-30*/[103,106,109], /*-20*/[102,105,108],/*-10*/[101,104,107],/*0*/[100,103,106],/*10*/[97,101,103],/*20*/[94,97,100],/*30*/[90,94,96],/*40*/[87,92,94],/*50*/[84,88,89],/*Vclean*/,/*Vflap*/]],
+,/*pressure altitude 6000*/[/*-40*/[104,107,110],/*-30*/[103,106,109], /*-20*/[102,105,108],/*-10*/[101,104,107],/*0*/[100,103,106],/*10*/[97,101,103],/*20*/[94,97,100],/*30*/[90,94,96],/*40*/[87,92,94],/*50*/[84,88,89],/*Vclean*/,/*Vflap*/]], 
 
 /*------------------------------
 
@@ -312,7 +316,7 @@ function calc () {
     console.log(flapRef[1].checked);
     console.log(ecsRef[1].checked);
     console.log(aiRef[1].checked);
-
+    
     limits(inputWeight, inputTemp, pressure, fieldElevation, runwayHeading, runwaySlope, windHeading, windSpeed);
     //chose which set based on flap and ecs choices
     if (flapRef[1].checked == false && ecsRef[1].checked == false && aiRef[1].checked == false){
@@ -342,7 +346,7 @@ function calc () {
     else{
         dispWrongSetConf.innerText =  'The config setting of Flap/ECS/Anti-ice is wrongly set.';
     }
-
+    
     //find the right array values
     calculatedPA= paCalc(pressure, fieldElevation);
     getSpeeds(calculatedPA, inputWeight, inputTemp, settingsUsed);//last arg is what set (1-6) is being used
@@ -471,7 +475,7 @@ function getSpeeds(pa, weight, temp, setArr){
     switch(setArr[1].length){
         case 12:
             for(var weightIndex = 19000; weightIndex<=30000; weightIndex+=1000){
-            /*the function iterates over the 10 array elements of possible weights and returns the row of the weight array that
+            /*the function iterates over the 10 array elements of possible weights and returns the row of the weight array that 
             contains the vSpeeds*/
                 if (weight== weightIndex){
                     var loopTemp= -40;
@@ -483,20 +487,20 @@ function getSpeeds(pa, weight, temp, setArr){
                                 weightArr.push(setArr[1][loopWeight][speedIndex], setArr[1][loopWeight][10], setArr[1][loopWeight][11]);
                                 //weightArr will then be [[v1,vr,v2], vClean, vFlap]
                                 bool=false;
-                            }break;
+                            }break; 
                         }
                         speedIndex++;
                         loopTemp+=10;
                     }
-                    }loopWeight++;
+                    }loopWeight++; 
                 }
-            //weight end
-
+            //weight end   
+            
             break;
-
+        
         default:
             for(var weightIndex = 20000; weightIndex<=29000; weightIndex+=1000){
-            /*the function iterates over the 10 array elements of possible weights and returns the row of the weight array that
+            /*the function iterates over the 10 array elements of possible weights and returns the row of the weight array that 
             contains the vSpeeds*/
                 if (weight== weightIndex){
                     var loopTemp= -40;
@@ -508,14 +512,14 @@ function getSpeeds(pa, weight, temp, setArr){
                                 weightArr.push(setArr[1][loopWeight][speedIndex], setArr[1][loopWeight][10], setArr[1][loopWeight][11]);
                                 //weightArr will then be [[v1,vr,v2], vClean, vFlap]
                                 bool=false;
-                            }break;
+                            }break; 
                         }
                         speedIndex++;
                         loopTemp+=10;
                     }
-                    }loopWeight++;
+                    }loopWeight++; 
                 }
-            //weight end
+            //weight end   
             break;//end default case
     }
 }
@@ -535,7 +539,7 @@ function crossCheck(pressureAltitudeArr, weightArr) {
         }
         return valueReturned;
       }
-    else if(null === weightArr[0][0]){//in the case weight arrey is empty return pressure altitude arrey v-speeds.
+    else if(null === weightArr[0][0]){//in the case weight arrey is empty return pressure altitude arrey v-speeds. 
     //it should logically be the same as if above, however this line was needed.
         valueReturned.push(weightArr[1], weightArr[2]);
     return pressureAltitudeArr;
@@ -554,9 +558,9 @@ function windCalc(runwayHeading, windDirection, windSpeed){
     let windArr=[];//Array containing crosswind speed vector and headwind speed vector
     let crosswind = windSpeed*Math.sin(radianDiff);
     let headwind = windSpeed*Math.cos(radianDiff);
-
+    
     windArr.push(Math.round(crosswind*1)/1, Math.round(headwind*1)/1);
-
+    
     return windArr;
 }
 function paCalc(pressure, fieldElevation){
@@ -606,7 +610,7 @@ function slopeCorrection(v1, vr, v2,  runwaySlope){
             v1 = vr;
         }
     }
-
+    
     else if (runwaySlope <= -1){
         runwaySlope = Math.ceil(runwaySlope);
         v1 += 2.5 * runwaySlope;
@@ -653,7 +657,7 @@ function limits(weight, temperature, pressure, elevation, runwayHeading, runwayS
     if (windspeed > 50 || windspeed < 0){
         retString += '| Windspeed Error: Windspeed out of range --> Do not fly';
     }
-
+    
     if(retString != ''){
         alert(retString);
     }
